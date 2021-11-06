@@ -1,8 +1,8 @@
-version: "3.8"
+version: "3.9"
 services:
   reverse-proxy:
     # The official v2 Traefik docker image
-    image: traefik:v2.2
+    image: traefik:v2.5
     # Enables the web UI and tells Traefik to listen to docker
     command:
       - "--api.insecure=true"
@@ -16,8 +16,6 @@ services:
     volumes:
       # So that Traefik can listen to the Docker events
       - /var/run/docker.sock:/var/run/docker.sock
-    # networks:
-    #   - proxy
 
   account:
     build:
@@ -37,9 +35,3 @@ services:
     # have to use $$ (double-dollar) so docker doesn't try to substitute a variable
     command: reflex -r "\.go$$" -s -- sh -c "go run ./"
 
-
-  # networks:
-  #   proxy:
-  #     external: true
-
-      # docker network create proxy 

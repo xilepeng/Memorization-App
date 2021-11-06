@@ -1,10 +1,12 @@
-FROM golang:alpine as builder
+# syntax=docker/dockerfile:1
+FROM golang:alpine as builder      
 
 WORKDIR /go/src/app
 
 # Get Reflex for live reload in dev
 ENV GO111MODULE=on
 ENV GOPROXY https://goproxy.cn
+
 RUN go get github.com/cespare/reflex
 
 COPY go.mod .
