@@ -5,8 +5,8 @@ import (
 	"net/http"
 
 	"github.com/gin-gonic/gin"
-	"github.com/xilepeng/memorization/model"
-	"github.com/xilepeng/memorization/model/apperrors"
+	"github.com/xilepeng/memorization/account/model"
+	"github.com/xilepeng/memorization/account/model/apperrors"
 )
 
 // Me handler calls services for getting

@@ -10,8 +10,7 @@ import (
 	"time"
 
 	"github.com/gin-gonic/gin"
-
-	"github.com/xilepeng/memorization/handler"
+	"github.com/xilepeng/memorization/account/handler"
 )
 
 func main() {

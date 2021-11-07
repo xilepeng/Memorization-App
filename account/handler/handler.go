@@ -5,7 +5,7 @@ import (
 	"os"
 
 	"github.com/gin-gonic/gin"
-	"github.com/xilepeng/memorization/accont/model"
+	"github.com/xilepeng/memorization/account/model"
 )
 
 // Handler struct holds required services for handler to function

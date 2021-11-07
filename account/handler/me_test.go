@@ -7,16 +7,13 @@ import (
 	"net/http/httptest"
 	"testing"
 
-	"github.com/stretchr/testify/mock"
-
 	"github.com/gin-gonic/gin"
+	"github.com/google/uuid"
 	"github.com/stretchr/testify/assert"
+	"github.com/stretchr/testify/mock"
+	"github.com/xilepeng/memorization/account/model"
 	"github.com/xilepeng/memorization/account/model/apperrors"
 	"github.com/xilepeng/memorization/account/model/mocks"
-
-	"github.com/google/uuid"
-
-	"github.com/xilepeng/memorization/account/model"
 )
 
 func TestMe(t *testing.T) {
@@ -33,7 +30,7 @@ func TestMe(t *testing.T) {
 		}
 
 		mockUserService := new(mocks.MockUserService)
-		mockUserService.On("Get", mock.AnythingOfType("*gin.Context"), uid).Return(mockUserResp, nil)
+		mockUserService.On("Get", mock.AnythingOfType("*context.emptyCtx"), uid).Return(mockUserResp, nil)
 
 		// a response recorder for getting written http response
 		rr := httptest.NewRecorder()
@@ -64,7 +61,7 @@ func TestMe(t *testing.T) {
 		})
 		assert.NoError(t, err)
 
-		assert.Equal(t, 200, rr.Code)
+		assert.Equal(t, http.StatusOK, rr.Code)
 		assert.Equal(t, respBody, rr.Body.Bytes())
 		mockUserService.AssertExpectations(t) // assert that UserService.Get was called
 	})
@@ -88,7 +85,7 @@ func TestMe(t *testing.T) {
 
 		router.ServeHTTP(rr, request)
 
-		assert.Equal(t, 500, rr.Code)
+		assert.Equal(t, http.StatusInternalServerError, rr.Code)
 		mockUserService.AssertNotCalled(t, "Get", mock.Anything)
 	})
 
