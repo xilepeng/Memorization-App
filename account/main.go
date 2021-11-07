@@ -10,18 +10,18 @@ import (
 	"time"
 
 	"github.com/gin-gonic/gin"
+
+	"github.com/xilepeng/memorization/handler"
 )
 
 func main() {
-	// you could insert your favorite logger here for structured or leveled logging
+	// 插入日志以进行结构化或分层
 	log.Println("Starting server...")
 
 	router := gin.Default()
 
-	router.GET("/api/account", func(c *gin.Context) {
-		c.JSON(http.StatusOK, gin.H{
-			"hello": "world",
-		})
+	handler.NewHandler(&handler.Config{
+		R: router,
 	})
 
 	srv := &http.Server{
@@ -29,7 +29,7 @@ func main() {
 		Handler: router,
 	}
 
-	// Graceful server shutdown - https://github.com/gin-gonic/examples/blob/master/graceful-shutdown/graceful-shutdown/server.go
+	// 优雅的服务器关闭 - https://github.com/gin-gonic/examples/blob/master/graceful-shutdown/graceful-shutdown/server.go
 	go func() {
 		if err := srv.ListenAndServe(); err != nil && err != http.ErrServerClosed {
 			log.Fatalf("Failed to initialize server: %v\n", err)
@@ -38,20 +38,19 @@ func main() {
 
 	log.Printf("Listening on port %v\n", srv.Addr)
 
-	// Wait for kill signal of channel
+	// 等待通道的终止信号
 	quit := make(chan os.Signal)
 
 	signal.Notify(quit, syscall.SIGINT, syscall.SIGTERM)
 
-	// This blocks until a signal is passed into the quit channel
+	// 一直阻塞，直到信号传入退出通道
 	<-quit
 
-	// The context is used to inform the server it has 5 seconds to finish
-	// the request it is currently handling
+	// 上下文用于通知服务器它有 5 秒完成当前正在处理的请求
 	ctx, cancel := context.WithTimeout(context.Background(), 5*time.Second)
 	defer cancel()
 
-	// Shutdown server
+	// 关闭服务
 	log.Println("Shutting down server...")
 	if err := srv.Shutdown(ctx); err != nil {
 		log.Fatalf("Server forced to shutdown: %v\n", err)
